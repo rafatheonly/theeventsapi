@@ -26,6 +26,9 @@ public class Usuario {
 
 	@OneToMany(mappedBy = "usuario")
 	private List<Tipoevento> tipoevento;
+	
+	@OneToMany(mappedBy = "usuario")
+	private List<Convidado> convidado;
 
 	public Long getId() {
 		return id;
@@ -107,6 +110,15 @@ public class Usuario {
 
 	public void setTipoevento(List<Tipoevento> tipoevento) {
 		this.tipoevento = tipoevento;
+	}	
+	
+	@JsonIgnore
+	public List<Convidado> getConvidado() {
+		return convidado;
+	}
+
+	public void setConvidado(List<Convidado> convidado) {
+		this.convidado = convidado;
 	}
 
 }

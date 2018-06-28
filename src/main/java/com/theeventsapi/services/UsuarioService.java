@@ -17,5 +17,7 @@ public interface UsuarioService {
 	void delete(Long id);
 
 	// PASSA A pagina Q SE QUER E A quantidade DE REGISTROS
-	Page<Usuario> findAll(int pagina, int quantidade);
+	Page<Usuario> findAllPage(int pagina, int quantidade);
+	
+	Long findCount();
 }

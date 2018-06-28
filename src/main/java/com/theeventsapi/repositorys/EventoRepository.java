@@ -6,4 +6,5 @@ import com.theeventsapi.entitys.Evento;
 
 public interface EventoRepository extends JpaRepository<Evento, Long> {
 
+	Evento findByTitulo(String titulo);
 }

@@ -24,7 +24,7 @@ CREATE TABLE evento (
   tipoevento_id BIGINT(1) NOT NULL,
   titulo VARCHAR(45) NOT NULL,
   data_criacao VARCHAR(20) NOT NULL,
-  descricao VARCHAR(45) NOT NULL,
+  descricao VARCHAR(100) NOT NULL,
   local VARCHAR(45) NOT NULL,
   foto VARCHAR(60) NULL,
   ativo TINYINT(1) NOT NULL,

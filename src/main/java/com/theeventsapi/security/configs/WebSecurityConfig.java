@@ -44,30 +44,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
 		return new JwtAuthenticationTokenFilter();
 	}
-	
+
 	@Bean
 	public AuthenticationManager customAuthenticationManager() throws Exception {
-	  return authenticationManager();
+		return authenticationManager();
 	}
-	
+
 	@Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests()
-                .antMatchers(
-                        HttpMethod.GET,
-                        "/",
-                        "/*.html",
-                        "/favicon.ico",
-                        "/**/*.html",
-                        "/**/*.css",
-                        "/**/*.js"
-                ).permitAll()
-                .antMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated();
-        httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.headers().cacheControl();
-    }
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity.csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+				.antMatchers(HttpMethod.GET, "/eventos/{\\d+}", "/eventos", "/", "/*.html", "/favicon.ico",
+						"/**/*.html", "/**/*.css", "/**/*.js,")
+				.permitAll().antMatchers("/auth/**").permitAll().antMatchers(HttpMethod.POST, "/usuarios").permitAll()
+				.anyRequest().authenticated();
+		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+		httpSecurity.headers().cacheControl();
+	}
 }

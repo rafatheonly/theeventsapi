@@ -24,15 +24,19 @@ public class UsuarioServiceImplementa implements UsuarioService {
 	}
 
 	public Usuario findById(Long id) {
-		return this.usuarioRepository.getOne(id);
+		return this.usuarioRepository.findById(id).get();
 	}
 
 	public void delete(Long id) {
-		this.usuarioRepository.getOne(id);
+		this.usuarioRepository.findById(id).get();
 	}
 
-	public Page<Usuario> findAll(int pagina, int quantidade) {
+	public Page<Usuario> findAllPage(int pagina, int quantidade) {
 		PageRequest pageRequest = PageRequest.of(pagina, quantidade);
 		return this.usuarioRepository.findAll(pageRequest);
+	}
+	
+	public Long findCount() {		
+		return this.usuarioRepository.findCount();
 	}
 }

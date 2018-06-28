@@ -36,8 +36,7 @@ public class UsuarioController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@PostMapping()
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PostMapping()	
 	public ResponseEntity<Response<Usuario>> create(HttpServletRequest request, @RequestBody Usuario usuario,
 			BindingResult result) {
 		Response<Usuario> response = new Response<Usuario>();
@@ -47,7 +46,10 @@ public class UsuarioController {
 				result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
 				return ResponseEntity.badRequest().body(response);
 			}
-			usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
+			usuario.setId(usuarioService.findCount() + 1L);
+			usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));			
+			usuario.setPerfil("ROLE_USUARIO");
+			usuario.setAtivo(true);
 			Usuario usuarioPersisted = (Usuario) usuarioService.createOrUpdate(usuario);
 			response.setData(usuarioPersisted);
 		} catch (DuplicateKeyException dE) {
@@ -129,7 +131,7 @@ public class UsuarioController {
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	public ResponseEntity<Response<Page<Usuario>>> findAll(@PathVariable int page, @PathVariable int count) {
 		Response<Page<Usuario>> response = new Response<Page<Usuario>>();
-		Page<Usuario> usuarios = usuarioService.findAll(page, count);
+		Page<Usuario> usuarios = usuarioService.findAllPage(page, count);
 		response.setData(usuarios);
 		return ResponseEntity.ok(response);
 	}

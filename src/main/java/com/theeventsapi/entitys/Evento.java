@@ -1,14 +1,23 @@
 package com.theeventsapi.entitys;
 
+import java.util.List;
+
+import org.springframework.data.annotation.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+//import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Evento {
 
-	@Id	
+	@Id
 	private Long id;
 
 	@ManyToOne
@@ -18,14 +27,26 @@ public class Evento {
 	@ManyToOne
 	@JoinColumn(name = "tipoevento_id")
 	private Tipoevento tipoevento;
-	
-	private String titulo;	
+
+	private String titulo;
 	private String data_criacao;
 	private String descricao;
 	private String local;
 	private String foto;
-
 	private boolean ativo;
+
+	@Transient
+	@OneToMany(mappedBy = "evento")
+	private List<Convidado> convidado;
+	
+	@JsonIgnore
+	public List<Convidado> getConvidado() {
+		return convidado;
+	}
+
+	public void setConvidado(List<Convidado> convidado) {
+		this.convidado = convidado;
+	}
 
 	public Long getId() {
 		return id;
