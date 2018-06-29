@@ -12,7 +12,7 @@ ENGINE = InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE tipoevento (
   id BIGINT(1) NOT NULL,
-  descricao_tipo_evento VARCHAR(45) NOT NULL,
+  descricao VARCHAR(45) NOT NULL,
   usuario_id BIGINT(1) NOT NULL,
   PRIMARY KEY (id, usuario_id), 
     FOREIGN KEY (usuario_id) REFERENCES usuario(id))

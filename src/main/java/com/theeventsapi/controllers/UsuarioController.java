@@ -1,10 +1,17 @@
 package com.theeventsapi.controllers;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +31,14 @@ import com.theeventsapi.entitys.Usuario;
 import com.theeventsapi.responses.Response;
 import com.theeventsapi.services.UsuarioService;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
 @RestController
 @RequestMapping("/usuarios")
 @CrossOrigin("${origem-permitida}")
@@ -36,7 +51,7 @@ public class UsuarioController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@PostMapping()	
+	@PostMapping()
 	public ResponseEntity<Response<Usuario>> create(HttpServletRequest request, @RequestBody Usuario usuario,
 			BindingResult result) {
 		Response<Usuario> response = new Response<Usuario>();
@@ -47,7 +62,7 @@ public class UsuarioController {
 				return ResponseEntity.badRequest().body(response);
 			}
 			usuario.setId(usuarioService.findCount() + 1L);
-			usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));			
+			usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 			usuario.setPerfil("ROLE_USUARIO");
 			usuario.setAtivo(true);
 			Usuario usuarioPersisted = (Usuario) usuarioService.createOrUpdate(usuario);
@@ -134,5 +149,17 @@ public class UsuarioController {
 		Page<Usuario> usuarios = usuarioService.findAllPage(page, count);
 		response.setData(usuarios);
 		return ResponseEntity.ok(response);
+	}
+
+	@GetMapping()
+	@RequestMapping("/exportusuario")
+	public ResponseEntity<byte[]> exportUsuario() throws JRException {
+		List<Usuario> usuarios = usuarioService.findAll();
+		Map<String, Object> parametros = new HashMap<>();
+		InputStream x = getClass().getResourceAsStream("/reports/usuarioExport.jrxml");
+		JasperReport is = JasperCompileManager.compileReport(x);
+		JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(usuarios));
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+				.body(JasperExportManager.exportReportToPdf(print));
 	}
 }
