@@ -1,14 +1,19 @@
 package com.theeventsapi.controllers;
 
+import java.io.InputStream;
+import java.util.HashMap;
 //import java.util.ArrayList;
 //import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -25,8 +30,18 @@ import org.springframework.web.bind.annotation.RestController;
 //import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 //import com.theeventsapi.entitys.Convidado;
 import com.theeventsapi.entitys.Evento;
+import com.theeventsapi.entitys.Usuario;
+import com.theeventsapi.repositorys.EventoRepository;
 import com.theeventsapi.responses.Response;
 import com.theeventsapi.services.EventoService;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @RestController
 @RequestMapping("/eventos")
@@ -36,6 +51,9 @@ public class EventoController {
 
 	@Autowired
 	private EventoService eventoService;
+	
+	@Autowired
+	private EventoRepository eventoRepository;
 
 	@PostMapping()
 	@PreAuthorize("hasAnyRole('ADMIN')")
@@ -139,6 +157,22 @@ public class EventoController {
 		Page<Evento> eventos = eventoService.findAllPage(page, count);
 		response.setData(eventos);
 		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping()
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping("/exportevento")
+	public ResponseEntity<byte[]> exportEvento() throws JRException {
+		 List<Evento> eventos = eventoRepository.findAll();    //usuarioRepository.findAll();
+		 Map<String, Object> parametros = new HashMap<>();
+		 InputStream x = getClass().getResourceAsStream("/reports/eventoExport.jrxml");
+		 JasperReport is = JasperCompileManager.compileReport(x);
+
+		 JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(eventos));
+
+		 return ResponseEntity.ok()
+         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+         .body(JasperExportManager.exportReportToPdf(print));
 	}
 
 	@GetMapping()

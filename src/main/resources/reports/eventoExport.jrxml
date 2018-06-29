@@ -15,9 +15,9 @@
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
-	<field name="nome" class="java.lang.String"/>
-	<field name="email" class="java.lang.String"/>
-	<field name="perfil" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="local" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -41,7 +41,7 @@
 					<textElement>
 						<font fontName="DejaVu Sans" size="22" isBold="false"/>
 					</textElement>
-					<text><![CDATA[Lista de Usuários]]></text>
+					<text><![CDATA[Lista de Eventos]]></text>
 				</staticText>
 			</frame>
 			<frame>
@@ -60,17 +60,10 @@
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="37" splitType="Stretch">
-			<staticText>
-				<reportElement x="484" y="0" width="100" height="30" uuid="e7a4242b-8780-4b38-bbb5-1b26201d7018">
-					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="92c6fdae-3240-4c2e-aef7-1d3937a31fde"/>
-				</reportElement>
-				<text><![CDATA[perfil]]></text>
-			</staticText>
-		</band>
+		<band height="37" splitType="Stretch"/>
 	</columnHeader>
 	<detail>
-		<band height="39" splitType="Stretch">
+		<band height="89" splitType="Stretch">
 			<frame>
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="180" height="18" uuid="b50221b5-8254-440b-8c6f-1f0b138c9259"/>
 				<textField isBlankWhenNull="true">
@@ -78,23 +71,23 @@
 					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font fontName="DejaVu Sans"/>
 					</textElement>
-					<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+					<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
 				</textField>
 			</frame>
 			<textField isBlankWhenNull="true">
-				<reportElement x="190" y="0" width="250" height="18" uuid="49d9381c-cc86-4781-b643-0ea39b1f1bc0">
+				<reportElement x="0" y="24" width="553" height="16" uuid="49d9381c-cc86-4781-b643-0ea39b1f1bc0">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3cdc034f-5000-4820-bcda-025b531e1bcf"/>
 				</reportElement>
 				<textElement textAlignment="Left">
 					<font fontName="DejaVu Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{email}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="440" y="0" width="113" height="18" uuid="675296fe-2820-4125-bc71-a9433828d8f3">
+				<reportElement x="0" y="50" width="113" height="18" uuid="675296fe-2820-4125-bc71-a9433828d8f3">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="92c6fdae-3240-4c2e-aef7-1d3937a31fde"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{perfil}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{local}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

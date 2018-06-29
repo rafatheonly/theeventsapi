@@ -1,10 +1,17 @@
 package com.theeventsapi.controllers;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,8 +28,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.theeventsapi.entitys.Usuario;
+import com.theeventsapi.repositorys.UsuarioRepository;
 import com.theeventsapi.responses.Response;
 import com.theeventsapi.services.UsuarioService;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -32,6 +48,9 @@ public class UsuarioController {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -134,5 +153,21 @@ public class UsuarioController {
 		Page<Usuario> usuarios = usuarioService.findAllPage(page, count);
 		response.setData(usuarios);
 		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping()
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping("/exportusuario")
+	public ResponseEntity<byte[]> exportUsuario() throws JRException {
+		 List<Usuario> usuarios = usuarioRepository.findAll();    //usuarioRepository.findAll();
+		 Map<String, Object> parametros = new HashMap<>();
+		 InputStream x = getClass().getResourceAsStream("/reports/usuarioExport.jrxml");
+		 JasperReport is = JasperCompileManager.compileReport(x);
+
+		 JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(usuarios));
+
+		 return ResponseEntity.ok()
+         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+         .body(JasperExportManager.exportReportToPdf(print));
 	}
 }
