@@ -28,7 +28,6 @@
 
 	<dependencies>
 		<dependency>
-<<<<<<< HEAD
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>LATEST</version>
@@ -43,28 +42,25 @@
 			<artifactId>jasperreports-functions</artifactId>
 			<version>LATEST</version>
 		</dependency>
-=======
-            <groupId>net.sf.jasperreports</groupId>
-            <artifactId>jasperreports</artifactId>
-            <version>LATEST</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jasperreports</groupId>
-            <artifactId>jasperreports-fonts</artifactId>
-            <version>LATEST</version>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.jasperreports</groupId>
-            <artifactId>jasperreports-functions</artifactId>
-            <version>LATEST</version>
-        </dependency>
->>>>>>> 480e5955ad160458d400ed08c0d9a23221f177c6
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-fonts</artifactId>
+			<version>LATEST</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports-functions</artifactId>
+			<version>LATEST</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-data-mongodb</artifactId> 
-			</dependency> -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
@@ -126,21 +122,10 @@
 			</plugin>
 		</plugins>
 	</build>
-<<<<<<< HEAD
 	<repositories>
 		<repository>
 			<id>jr-ce-releases</id>
 			<url>http://jaspersoft.jfrog.io/jaspersoft/jr-ce-releases/</url>
 		</repository>
-	</repositories>
-=======
-	 <repositories>
-        <repository>
-            <id>jr-ce-releases</id>
-            <url>http://jaspersoft.jfrog.io/jaspersoft/jr-ce-releases/</url>
-        </repository>
-    </repositories>
-
->>>>>>> 480e5955ad160458d400ed08c0d9a23221f177c6
-
+	</repositories>	
 </project>
