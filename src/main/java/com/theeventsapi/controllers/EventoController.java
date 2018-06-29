@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.RestController;
 //import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 //import com.theeventsapi.entitys.Convidado;
 import com.theeventsapi.entitys.Evento;
+import com.theeventsapi.entitys.Usuario;
+import com.theeventsapi.repositorys.EventoRepository;
 import com.theeventsapi.responses.Response;
 import com.theeventsapi.services.EventoService;
 
@@ -49,6 +51,9 @@ public class EventoController {
 
 	@Autowired
 	private EventoService eventoService;
+	
+	@Autowired
+	private EventoRepository eventoRepository;
 
 	@PostMapping()
 	@PreAuthorize("hasAnyRole('ADMIN')")
@@ -151,6 +156,22 @@ public class EventoController {
 		Page<Evento> eventos = eventoService.findAllPage(page, count);
 		response.setData(eventos);
 		return ResponseEntity.ok(response);
+	}
+	
+	@GetMapping()
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping("/exportevento")
+	public ResponseEntity<byte[]> exportEvento() throws JRException {
+		 List<Evento> eventos = eventoRepository.findAll();    //usuarioRepository.findAll();
+		 Map<String, Object> parametros = new HashMap<>();
+		 InputStream x = getClass().getResourceAsStream("/reports/eventoExport.jrxml");
+		 JasperReport is = JasperCompileManager.compileReport(x);
+
+		 JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(eventos));
+
+		 return ResponseEntity.ok()
+         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+         .body(JasperExportManager.exportReportToPdf(print));
 	}
 
 	@GetMapping()

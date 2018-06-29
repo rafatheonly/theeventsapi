@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.theeventsapi.entitys.Usuario;
+import com.theeventsapi.repositorys.UsuarioRepository;
 import com.theeventsapi.responses.Response;
 import com.theeventsapi.services.UsuarioService;
 
@@ -47,6 +48,9 @@ public class UsuarioController {
 
 	@Autowired
 	private UsuarioService usuarioService;
+	
+	@Autowired
+	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -150,6 +154,7 @@ public class UsuarioController {
 		response.setData(usuarios);
 		return ResponseEntity.ok(response);
 	}
+<<<<<<< HEAD
 
 	@GetMapping()
 	@RequestMapping("/exportusuario")
@@ -161,5 +166,22 @@ public class UsuarioController {
 		JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(usuarios));
 		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
 				.body(JasperExportManager.exportReportToPdf(print));
+=======
+	
+	@GetMapping()
+	@PreAuthorize("hasAnyRole('ADMIN')")
+	@RequestMapping("/exportusuario")
+	public ResponseEntity<byte[]> exportUsuario() throws JRException {
+		 List<Usuario> usuarios = usuarioRepository.findAll();    //usuarioRepository.findAll();
+		 Map<String, Object> parametros = new HashMap<>();
+		 InputStream x = getClass().getResourceAsStream("/reports/usuarioExport.jrxml");
+		 JasperReport is = JasperCompileManager.compileReport(x);
+
+		 JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(usuarios));
+
+		 return ResponseEntity.ok()
+         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+         .body(JasperExportManager.exportReportToPdf(print));
+>>>>>>> 480e5955ad160458d400ed08c0d9a23221f177c6
 	}
 }
