@@ -28,8 +28,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.theeventsapi.entitys.Usuario;
+<<<<<<< HEAD
 import com.theeventsapi.mail.Mail;
 import com.theeventsapi.repositorys.UsuarioRepository;
+=======
+>>>>>>> b47131149593c1732a5b33e207b7d9669aeb870f
 import com.theeventsapi.responses.Response;
 import com.theeventsapi.services.UsuarioService;
 
@@ -52,14 +55,11 @@ public class UsuarioController {
 	 
 	@Autowired
 	private UsuarioService usuarioService;
-	
-	@Autowired
-	private UsuarioRepository usuarioRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 
-	@PostMapping()	
+	@PostMapping()
 	public ResponseEntity<Response<Usuario>> create(HttpServletRequest request, @RequestBody Usuario usuario,
 			BindingResult result) {
 		Response<Usuario> response = new Response<Usuario>();
@@ -70,7 +70,7 @@ public class UsuarioController {
 				return ResponseEntity.badRequest().body(response);
 			}
 			usuario.setId(usuarioService.findCount() + 1L);
-			usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));			
+			usuario.setSenha(passwordEncoder.encode(usuario.getSenha()));
 			usuario.setPerfil("ROLE_USUARIO");
 			usuario.setAtivo(true);
 			Usuario usuarioPersisted = (Usuario) usuarioService.createOrUpdate(usuario);
@@ -159,20 +159,21 @@ public class UsuarioController {
 		response.setData(usuarios);
 		return ResponseEntity.ok(response);
 	}
-	
+
 	@GetMapping()
+<<<<<<< HEAD
 	//@PreAuthorize("hasAnyRole('ADMIN')")
+=======
+>>>>>>> b47131149593c1732a5b33e207b7d9669aeb870f
 	@RequestMapping("/exportusuario")
 	public ResponseEntity<byte[]> exportUsuario() throws JRException {
-		 List<Usuario> usuarios = usuarioRepository.findAll();    //usuarioRepository.findAll();
-		 Map<String, Object> parametros = new HashMap<>();
-		 InputStream x = getClass().getResourceAsStream("/reports/usuarioExport.jrxml");
-		 JasperReport is = JasperCompileManager.compileReport(x);
-
-		 JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(usuarios));
-
-		 return ResponseEntity.ok()
-         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
-         .body(JasperExportManager.exportReportToPdf(print));
+		List<Usuario> usuarios = usuarioService.findAll();
+		Map<String, Object> parametros = new HashMap<>();
+		InputStream x = getClass().getResourceAsStream("/reports/usuarioExport.jrxml");
+		JasperReport is = JasperCompileManager.compileReport(x);
+		JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(usuarios));
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+				.body(JasperExportManager.exportReportToPdf(print));
 	}
+
 }

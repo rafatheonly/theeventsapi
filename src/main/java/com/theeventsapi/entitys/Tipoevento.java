@@ -16,7 +16,7 @@ public class Tipoevento {
 	@Id
 	private Long id;
 
-	private String descricao_tipo_evento;
+	private String descricao;
 
 	@OneToMany(mappedBy = "tipoevento")
 	private List<Evento> evento;
@@ -33,12 +33,12 @@ public class Tipoevento {
 		this.id = id;
 	}
 
-	public String getDescricao_tipo_evento() {
-		return descricao_tipo_evento;
+	public String getDescricao() {
+		return descricao;
 	}
 
-	public void setDescricao_tipo_evento(String descricao_tipo_evento) {
-		this.descricao_tipo_evento = descricao_tipo_evento;
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
 	}
 
 	@JsonIgnore

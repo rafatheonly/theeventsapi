@@ -7,9 +7,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
-import com.theeventsapi.entitys.Convidado;
+//import com.theeventsapi.entitys.Convidado;
 import com.theeventsapi.entitys.Evento;
-import com.theeventsapi.repositorys.ConvidadoRepository;
+//import com.theeventsapi.repositorys.ConvidadoRepository;
 import com.theeventsapi.repositorys.EventoRepository;
 import com.theeventsapi.services.EventoService;
 
@@ -19,8 +19,8 @@ public class EventoServiceImplementa implements EventoService {
 	@Autowired
 	private EventoRepository eventoRepository;
 
-	@Autowired
-	private ConvidadoRepository convidadoRepository;
+	/**@Autowired
+	private ConvidadoRepository convidadoRepository;**/
 
 	public List<Evento> findAll() {
 		return this.eventoRepository.findAll();
@@ -43,8 +43,12 @@ public class EventoServiceImplementa implements EventoService {
 		return this.eventoRepository.findAll(pageRequest);
 	}
 
-	public Iterable<Convidado> listConvidados(Long eventoId) {
+	/**public Iterable<Convidado> listConvidados(Long eventoId) {
 		return this.convidadoRepository.findByEventoIdOrderByNomeDesc(eventoId);
+	}**/
+	
+	public Long findCount() {		
+		return this.eventoRepository.findCount();
 	}
 
 }

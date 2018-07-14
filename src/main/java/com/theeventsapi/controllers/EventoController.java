@@ -2,8 +2,6 @@ package com.theeventsapi.controllers;
 
 import java.io.InputStream;
 import java.util.HashMap;
-//import java.util.ArrayList;
-//import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,10 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 //import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-//import com.theeventsapi.entitys.Convidado;
 import com.theeventsapi.entitys.Evento;
-import com.theeventsapi.entitys.Usuario;
-import com.theeventsapi.repositorys.EventoRepository;
 import com.theeventsapi.responses.Response;
 import com.theeventsapi.services.EventoService;
 
@@ -51,9 +46,6 @@ public class EventoController {
 
 	@Autowired
 	private EventoService eventoService;
-	
-	@Autowired
-	private EventoRepository eventoRepository;
 
 	@PostMapping()
 	@PreAuthorize("hasAnyRole('ADMIN')")
@@ -66,6 +58,8 @@ public class EventoController {
 				result.getAllErrors().forEach(error -> response.getErrors().add(error.getDefaultMessage()));
 				return ResponseEntity.badRequest().body(response);
 			}
+			evento.setId(eventoService.findCount() + 1L);
+			evento.setAtivo(true);
 			Evento eventoPersisted = (Evento) eventoService.createOrUpdate(evento);
 			response.setData(eventoPersisted);
 		} catch (DuplicateKeyException dE) {
@@ -79,7 +73,7 @@ public class EventoController {
 	}
 
 	private void validateCreateEvento(Evento evento, BindingResult result) {
-		if (evento.getId() == 0) {
+		if (evento.getTitulo() == null) {
 			result.addError(new ObjectError("Evento", "Titulo do evento não informado!"));
 			return;
 		}
@@ -127,28 +121,25 @@ public class EventoController {
 		response.setData(evento);
 		return ResponseEntity.ok(response);
 	}
-	
-	/**@GetMapping(value = "{id}")
-	@PreAuthorize("hasAnyRole('ADMIN')")
-	public ResponseEntity<Response<Evento>> findById(@PathVariable("id") Long id) {
-		Response<Evento> response = new Response<Evento>();
-		Evento evento = eventoService.findById(id);
-		if (evento == null) {
-			response.getErrors().add("Register not found id:" + id);
-			return ResponseEntity.badRequest().body(response);
-		}
-		List<Convidado> convidados = new ArrayList<Convidado>();
-		Iterable<Convidado> changesCurrent = eventoService.listConvidados(evento.getId());
-		for (Iterator<Convidado> iterator = changesCurrent.iterator(); iterator.hasNext();) {
-			Convidado convidado = (Convidado) iterator.next();
-			System.out.println(convidado);
-			convidado.setEvento(null);
-			convidados.add(convidado);
-		}
-		evento.setConvidado(convidados);
-		response.setData(evento);
-		return ResponseEntity.ok(response);
-	}**/
+
+	/**
+	 * @GetMapping(value = "{id}") @PreAuthorize("hasAnyRole('ADMIN')") public
+	 *                   ResponseEntity<Response<Evento>>
+	 *                   findById(@PathVariable("id") Long id) { Response<Evento>
+	 *                   response = new Response<Evento>(); Evento evento =
+	 *                   eventoService.findById(id); if (evento == null) {
+	 *                   response.getErrors().add("Register not found id:" + id);
+	 *                   return ResponseEntity.badRequest().body(response); }
+	 *                   List<Convidado> convidados = new ArrayList<Convidado>();
+	 *                   Iterable<Convidado> changesCurrent =
+	 *                   eventoService.listConvidados(evento.getId()); for
+	 *                   (Iterator<Convidado> iterator = changesCurrent.iterator();
+	 *                   iterator.hasNext();) { Convidado convidado = (Convidado)
+	 *                   iterator.next(); System.out.println(convidado);
+	 *                   convidado.setEvento(null); convidados.add(convidado); }
+	 *                   evento.setConvidado(convidados); response.setData(evento);
+	 *                   return ResponseEntity.ok(response); }
+	 **/
 
 	@GetMapping(value = "{page}/{count}")
 	@PreAuthorize("hasAnyRole('ADMIN')")
@@ -158,25 +149,27 @@ public class EventoController {
 		response.setData(eventos);
 		return ResponseEntity.ok(response);
 	}
-	
-	@GetMapping()
-	//@PreAuthorize("hasAnyRole('ADMIN')")
-	@RequestMapping("/exportevento")
-	public ResponseEntity<byte[]> exportEvento() throws JRException {
-		 List<Evento> eventos = eventoRepository.findAll();    //usuarioRepository.findAll();
-		 Map<String, Object> parametros = new HashMap<>();
-		 InputStream x = getClass().getResourceAsStream("/reports/eventoExport.jrxml");
-		 JasperReport is = JasperCompileManager.compileReport(x);
-
-		 JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(eventos));
-
-		 return ResponseEntity.ok()
-         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
-         .body(JasperExportManager.exportReportToPdf(print));
-	}
 
 	@GetMapping()
 	public List<Evento> findAll() {
 		return eventoService.findAll();
+	}
+
+	@GetMapping()
+<<<<<<< HEAD
+	//@PreAuthorize("hasAnyRole('ADMIN')")
+=======
+>>>>>>> b47131149593c1732a5b33e207b7d9669aeb870f
+	@RequestMapping("/exportevento")
+	public ResponseEntity<byte[]> exportEvento() throws JRException {
+		List<Evento> eventos = eventoService.findAll(); // usuarioRepository.findAll();
+		Map<String, Object> parametros = new HashMap<>();
+		InputStream x = getClass().getResourceAsStream("/reports/eventoExport.jrxml");
+		JasperReport is = JasperCompileManager.compileReport(x);
+
+		JasperPrint print = JasperFillManager.fillReport(is, parametros, new JRBeanCollectionDataSource(eventos));
+
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_PDF_VALUE)
+				.body(JasperExportManager.exportReportToPdf(print));
 	}
 }
