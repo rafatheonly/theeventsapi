@@ -54,7 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/eventos/{\\d+}", "/eventos", "/", "/*.html", "/favicon.ico",
+				.antMatchers(HttpMethod.GET, "/eventos/{\\d+}", "/usuarios/exportusuario", "/eventos", "/", "/*.html", "/favicon.ico",
 						"/**/*.html", "/**/*.css", "/**/*.js,")
 				.permitAll().antMatchers("/auth/**").permitAll().antMatchers(HttpMethod.POST, "/usuarios").permitAll()
 				.anyRequest().authenticated();

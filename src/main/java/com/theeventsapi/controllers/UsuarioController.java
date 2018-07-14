@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.theeventsapi.entitys.Usuario;
+import com.theeventsapi.mail.Mail;
 import com.theeventsapi.repositorys.UsuarioRepository;
 import com.theeventsapi.responses.Response;
 import com.theeventsapi.services.UsuarioService;
@@ -46,6 +47,9 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 // CASO QUEIRA LIBERAR QUALQUER ACESSO: @CrossOrigin(origins = "*")
 public class UsuarioController {
 
+	@Autowired
+	private Mail mail;
+	 
 	@Autowired
 	private UsuarioService usuarioService;
 	
@@ -71,6 +75,7 @@ public class UsuarioController {
 			usuario.setAtivo(true);
 			Usuario usuarioPersisted = (Usuario) usuarioService.createOrUpdate(usuario);
 			response.setData(usuarioPersisted);
+			mail.notificaUsuarioCriado(usuario.getEmail());
 		} catch (DuplicateKeyException dE) {
 			response.getErrors().add("E-mail já registrado!");
 			return ResponseEntity.badRequest().body(response);
@@ -156,7 +161,7 @@ public class UsuarioController {
 	}
 	
 	@GetMapping()
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	//@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping("/exportusuario")
 	public ResponseEntity<byte[]> exportUsuario() throws JRException {
 		 List<Usuario> usuarios = usuarioRepository.findAll();    //usuarioRepository.findAll();
