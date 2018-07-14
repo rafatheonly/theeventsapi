@@ -28,11 +28,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.theeventsapi.entitys.Usuario;
-<<<<<<< HEAD
+
 import com.theeventsapi.mail.Mail;
 import com.theeventsapi.repositorys.UsuarioRepository;
-=======
->>>>>>> b47131149593c1732a5b33e207b7d9669aeb870f
+
 import com.theeventsapi.responses.Response;
 import com.theeventsapi.services.UsuarioService;
 
@@ -161,10 +160,7 @@ public class UsuarioController {
 	}
 
 	@GetMapping()
-<<<<<<< HEAD
 	//@PreAuthorize("hasAnyRole('ADMIN')")
-=======
->>>>>>> b47131149593c1732a5b33e207b7d9669aeb870f
 	@RequestMapping("/exportusuario")
 	public ResponseEntity<byte[]> exportUsuario() throws JRException {
 		List<Usuario> usuarios = usuarioService.findAll();

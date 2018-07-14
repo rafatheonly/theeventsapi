@@ -28,7 +28,6 @@
 
 	<dependencies>
 		<dependency>
-<<<<<<< HEAD
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>LATEST</version>
@@ -49,16 +48,7 @@
             <artifactId>jasperreports-functions</artifactId>
             <version>LATEST</version>
         </dependency>
-=======
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-			<version>LATEST</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports-fonts</artifactId>
-			<version>LATEST</version>
-		</dependency>
+
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports-functions</artifactId>
@@ -79,7 +69,7 @@
 			<artifactId>jasperreports-functions</artifactId>
 			<version>LATEST</version>
 		</dependency>
->>>>>>> b47131149593c1732a5b33e207b7d9669aeb870f
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>

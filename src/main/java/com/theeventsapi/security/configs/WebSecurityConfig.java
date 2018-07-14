@@ -53,16 +53,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
-<<<<<<< HEAD
-				.antMatchers(HttpMethod.GET, "/eventos/{\\d+}", "/usuarios/exportusuario", "/eventos", "/", "/*.html", "/favicon.ico",
-						"/**/*.html", "/**/*.css", "/**/*.js,")
-=======
-				.antMatchers(HttpMethod.GET, "/eventos/{\\d+}", "/eventos", "/exportevento", "/exportusuario", "/",
-						"/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js,")
->>>>>>> b47131149593c1732a5b33e207b7d9669aeb870f
-				.permitAll().antMatchers("/auth/**").permitAll().antMatchers(HttpMethod.POST, "/usuarios").permitAll()
-				.anyRequest().authenticated();
+		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
+		.antMatchers(HttpMethod.GET, "/eventos/{\\d+}", "/eventos", "/exportevento", "/exportusuario", "/",
+				"/*.html", "/favicon.ico", "/**/*.html", "/**/*.css", "/**/*.js,")
+		.permitAll().antMatchers("/auth/**").permitAll().antMatchers(HttpMethod.POST, "/usuarios").permitAll()
+		.anyRequest().authenticated();
 		httpSecurity.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 		httpSecurity.headers().cacheControl();
 	}

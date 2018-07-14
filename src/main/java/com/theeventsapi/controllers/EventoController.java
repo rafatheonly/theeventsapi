@@ -156,10 +156,9 @@ public class EventoController {
 	}
 
 	@GetMapping()
-<<<<<<< HEAD
+
 	//@PreAuthorize("hasAnyRole('ADMIN')")
-=======
->>>>>>> b47131149593c1732a5b33e207b7d9669aeb870f
+
 	@RequestMapping("/exportevento")
 	public ResponseEntity<byte[]> exportEvento() throws JRException {
 		List<Evento> eventos = eventoService.findAll(); // usuarioRepository.findAll();
